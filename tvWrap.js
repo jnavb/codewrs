@@ -17,7 +17,7 @@ var tvRemote = function(words) {
           letter.toLowerCase() == letter && mode == 'lowerCase'){         
           count = count 
                   + 
-                  Math.min(Math.abs(position[0] - nextPos[0]), Mapinth.min(nextPos[0],position[0]) - Math.max(nextPos[0], position[0]) + 8) 
+                  Math.min(Math.abs(position[0] - nextPos[0]), Math.min(nextPos[0],position[0]) - Math.max(nextPos[0], position[0]) + 8) 
                   + 
                   Math.min(Math.abs(position[1] - nextPos[1]), Math.min(nextPos[1],position[1]) - Math.max(nextPos[1],position[1]) + 6) 
                   + 1;
