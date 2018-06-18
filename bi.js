@@ -1,35 +1,34 @@
-function sum(endPow, iniPow, times) {
-    return (((endPow - iniPow + 1) * (iniPow + endPow)) / 2) * times;
+function maxPow(pow) {
+    return Math.pow(2, Math.ceil(Math.log2(pow)));
 }
 
-function build(col, row, l) {
-    if (col < row)[col, row] = [row, col];
-
-    var maxColPow = Math.pow(2, parseInt(Math.log2(col)));
-    var maxRowPow = Math.pow(2, parseInt(Math.log2(row)));  
-
-    if(col == maxColPow){
-    return sum(col - 1 - l, 1, row);
-    }
-
-    if (maxColPow == maxRowPow) {
-        return sum(maxColPow - 1 - l, 1, maxRowPow) 
-            +
-            sum(maxColPow + maxRowPow - 1 - l, maxColPow, (col - maxColPow) + (row - maxRowPow)) //Rigth and bottom leftover
-            +  
-            build(col - maxColPow, row - maxRowPow, l); //Diamond leftover
-    }
-
-    return sum(maxColPow - 1 - l, 1, maxRowPow) //XOR SUM
-    + 
-    sum(maxColPow + maxRowPow - 1 - l, maxColPow, col - maxColPow) //Rigth leftover
-    + 
-    sum(maxColPow - 1 - l, 0, row - maxRowPow) //Bottom leftover
-    + 
-    sum(maxColPow + row - 1 - l, maxColPow + maxRowPow, col - maxColPow); //Diamond leftover
+function sum(a, b) {
+    return parseInt(((b - a + 1) * (a + b)) / 2);
 }
 
-function elderAge(m,n,l,t){
-    var res = build(m,n,l) % t;
-    return res > 0 ? res:0; 
+function elderAge(m, n, l, t) {
+    if (m > n)[m, n] = [n, m];
+
+    var [maxM, maxN] = [maxPow(m), maxPow(n)];
+
+    if (m == 0 || n == 0 || l > maxN)
+        return 0;
+
+    if (maxM == maxN)
+        return (sum(1, maxN - 1 - l) * (m + n - maxN) + elderAge(maxN - n, maxM - m, l, t)) % t;
+
+
+    if (maxM < maxN) {
+        maxM = parseInt(maxN / 2);
+        var aux = sum(1, maxN - 1 - l) * m - (maxN - n) * sum(Math.max(0, maxM - l), maxN - 1 - l);
+        if (l <= maxM)
+            aux += (maxM - l) * (maxM - m) * (maxN - n) + elderAge(maxM - m, maxN - n, 0, t);
+        else
+            aux += elderAge(maxM - m, maxN - n, l - maxM, t);
+
+        if (aux >= 0)
+            return aux % t;
+        else
+            return t + (aux % t);
+    }
 }
